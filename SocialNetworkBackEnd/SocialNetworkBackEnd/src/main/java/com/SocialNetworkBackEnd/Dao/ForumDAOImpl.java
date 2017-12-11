@@ -2,66 +2,169 @@ package com.SocialNetworkBackEnd.Dao;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.SocialNetworkBackEnd.Model.Blog;
+//import com.SocialNetworkBackEnd.Model.forum;
 import com.SocialNetworkBackEnd.Model.Forum;
+
 @Repository
-public class ForumDAOImpl implements ForumDAO {
-	
-	
+@Transactional
+public class ForumDaoImpl implements ForumDao {
+
 	@Autowired 
-	SessionFactory sessionFactory;
-  public ForumDAOImpl(SessionFactory sessionFactory)
+	SessionFactory sessionfactory;
+  public ForumDaoImpl(SessionFactory sessionFactory)
 	{
-		this.sessionFactory=sessionFactory;
+		this.sessionfactory=sessionFactory;
 	}
 
-	public boolean addForum(Forum forum) {
-	try
+  @Transactional
+	//@Override
+	public boolean addforum(Forum forum) 
 	{
-	sessionFactory.getCurrentSession().save(forum);
+		try
+		{
+			Session session=sessionfactory.openSession();
+			Transaction transaction=session.getTransaction();
+			transaction.begin();
+			session.save(forum);
+			transaction.commit();
+			session.close();
+			/*System.out.println("1");
+		    System.out.println(sessionfactory);
+
+			sessionfactory.getCurrentSession().save(user);*/
+			return true;
+		}
+		catch(Exception e)
+		{
+			System.out.println(e);
+		}
+		return false;
+	}
+
+	@Transactional
+	public Forum getforumbyid(int forumId) 
+	{
+		
+	    Session session=sessionfactory.openSession();
+	    Transaction transaction=session.getTransaction();
+	    transaction.begin();
+	    Forum b=session.get(Forum.class,new Integer(forumId));
+	       session.flush();
+	       transaction.commit();
+	       session.close();
+		return b;
+		 
+	}
+@Transactional
+public boolean updateforum(Forum b)
+{
+try
+	{
+	 Session session=sessionfactory.openSession();
+	Transaction transaction=session.getTransaction();
+	transaction.begin(); 
+	session.saveOrUpdate(b);
+   session.flush();
+   transaction.commit();
+	 
+   session.close();
+	 System.out.println("updated successfully");
 	return true;
 	}
-	catch (Exception e)
+	catch(Exception e)
 	{
-	return false;
-	}
-	}
-
-
-	public boolean updateForum(Forum forum) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-
-	public boolean deleteForum(Forum forum) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-
-	public Forum getForum(int forumId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	public List<Forum> getAllForum() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	public boolean approveForum(Forum forum) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	
+	System.out.println(e);
+	return false;	
 }
+}
+@Transactional
+public boolean deleteforum(Forum b)
+{
+try
+	{
+	Session session=sessionfactory.openSession();
+	Transaction transaction=session.getTransaction();
+	transaction.begin();
+	session.delete(b);
+	session.flush();
+	transaction.commit();
+	session.close();
+	 System.out.println("deleted successfully");
+	return true;
+	}
+	catch(Exception e)
+	{
+	System.out.println(e);
+	return false;	
+}
+}
+@Transactional
+public List<Forum> getallforums()
+{
+	Session session=sessionfactory.openSession();
+	Transaction transaction=session.getTransaction();
+	transaction.begin();
+	String hql="from forum";
+	Query query=session.createQuery(hql);
+	return query.list();
+}
+@Transactional
+public boolean approveforum(Forum b)
+{
+	try
+	{
+		Session session=sessionfactory.openSession();
+		Transaction transaction=session.getTransaction();
+		transaction.begin(); 
+		session.saveOrUpdate(b);
+ 		 session.flush();
+ 	     transaction.commit();
+ 		 session.close();
+//	sessionfactory.getCurrentSession().saveOrUpdate(b);
+	System.out.println("appoved forum");
+	return true;
+}
+	catch(Exception e)
+	{
+		System.out.println(e);
+		return false;	
+	}
+}
+@Transactional
+public boolean rejectforum(Forum b) {
+	try
+	{
+		Session session=sessionfactory.openSession();
+		Transaction transaction=session.getTransaction();
+		transaction.begin(); 
+		session.saveOrUpdate(b);
+      // transaction.commit();
+		 session.flush();
+	     transaction.commit();
+		 session.close();
+	//sessionfactory.getCurrentSession().saveOrUpdate(b);
+	System.out.println("rejected forum");
+	return true;
+}
+	catch(Exception e)
+	{
+		System.out.println(e);
+		return false;	
+	}
+}
+
+}
+
+
+
 
 
