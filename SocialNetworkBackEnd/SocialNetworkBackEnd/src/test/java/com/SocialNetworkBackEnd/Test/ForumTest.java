@@ -1,90 +1,89 @@
-package com.SocialNetworkBackEnd.Test;
+package SocialNetworkRest.SocialNetworkBackEnd.test;
 
+import static org.junit.Assert.*;
 
-	import static org.junit.Assert.assertEquals;
-	import static org.junit.Assert.assertNotEquals;
-	import static org.junit.Assert.assertNotNull;
-	import static org.junit.Assert.assertTrue;
+import java.util.Date;
+import java.util.List;
 
-	import java.util.Date;
-	import java.util.List;
-	import java.util.logging.Logger;
+import javax.transaction.Transactional;
 
-	import org.junit.BeforeClass;
-	import org.junit.Ignore;
-	import org.junit.Test;
-	import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.hibernate.SessionFactory;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
-     import com.SocialNetworkBackEnd.Dao.ForumDAO;
+import com.SocialNetworkBackEnd.Config.ApplicationContextConfig;
+import com.SocialNetworkBackEnd.Dao.ForumDao;
+//import com.SocialNetworkBackEnd.Dao.UserDao;
+import com.SocialNetworkBackEnd.Model.Forum;
+//import com.SocialNetworkBackEnd.Model.UserDetail;
 
-	import com.SocialNetworkBackEnd.Model.Forum;
+@RunWith(SpringRunner.class)
+@ContextConfiguration(classes={ApplicationContextConfig.class})
+@WebAppConfiguration
+@Transactional
+public class ForumDaoTest {
 
-	public class ForumTest {
-
-		public static final Logger log = Logger.getLogger(ForumTest.class.getName());
-
-		private static final Object Forum = null;
+	@Autowired
+    ForumDao forumdao;
+	@Autowired
+    public Forum forum;
+	
+	@Autowired
+	SessionFactory sessionFactory;
+	//@Ignore
+	@Test
+	public  void addForumTest() {
+		Forum forum = new Forum();
+	    forum.setForumContent("good");
+	    forum.setUserId(1);
+	    forum.setForumName("forum1");
+	    forum.setUsername("AA");
+	    forum.setStatus("A");
+	    forum.setCreateDate(new java.util.Date());
+	    System.out.println("1");
+		assertEquals("Failed to add user!",forumdao.addforum(forum));
+		System.out.println("2");
+	} 
+	
+	//@Ignore
+	@Test
+	public void getForumTest(){
 		
-		public static AnnotationConfigApplicationContext context;
-		private static ForumDAO forumDAO;
-		private Forum forum;
+		Forum forum = forumdao.getforumbyid(1);
+		assertNotEquals("forum Not Found", forum);
 		
-		@BeforeClass
-		public static void init(){
-			context =new AnnotationConfigApplicationContext();
-			context.scan("com.SocialNetworkBackEnd.*");
-			context.refresh();
-			forumDAO =(ForumDAO) context.getBean("forumDAO");
-		}
-		
-		
-		//@Ignore
-		@Test
-		public  void addForumTest() {
-			Forum forum = new Forum();
-			forum.setForumName("Advance Java");
-			forum.setForumContent(" Advance java concept");
-			forum.setStatus("B");
-			forum.setUserId(2);
-			forum.setCreateDate(new Date());
-			assertEquals("Failed to add user!",true,forumDAO.addForum(forum));
-			
-		} 
-		
-		@Ignore
-		@Test
-		public void getForumTest(){
-			
-			Forum forum = forumDAO.getForum(1);
-			assertNotEquals("forum Not Found", forum);
-			
-			log.info("Forum Name:"+forum.getForumName());
-			log.info("Blog Content"+forum.getForumContent());
-		}
-		@Ignore
-		@Test
-		public void getAllForumTest(){
-			
-		    
-			List<Forum> forumList=(List<Forum>)forumDAO.getAllForum();
-			assertNotNull("Forum List Not Found", forumList.get(0));
-			for(Forum forum:forumList)
-				
-			{
-				log.info("Forum ID"+forum.getForumId()+"::"+"Forum Name:"+forum.getForumName());
-				assertTrue("Problem in Deletion", forumDAO.deleteForum(forum));
-			}
-		}
-		@Ignore
-		@Test
-		public void updateForumTest(){
-		
-			Forum forum = forumDAO.getForum(1);
-			forum.setForumContent("wcd");
-			forum.setForumName("app");
-			assertTrue("Problem in updation",forumDAO.updateForum(forum));
-		}
-		
-		
+		System.out.println("Forum Name:"+forum.getForumName());
+		System.out.println("Blog Content"+forum.getForumContent());
 	}
+	//@Ignore
+	@Test
+	public void getAllForumTest(){
+		
+	    
+		List<Forum> forumList=(List<Forum>)forumdao.getallforums();
+		assertNotNull("Forum List Not Found", forumList.get(0));
+		for(Forum forum:forumList)
+			
+		{
+			System.out.println("Forum ID"+forum.getForumId()+"::"+"Forum Name:"+forum.getForumName());
+			assertTrue("Problem in Deletion", forumdao.deleteforum(forum));
+		}
+	}
+	//@Ignore
+	@Test
+	public void updateForumTest(){
+	
+		Forum forum = forumdao.getforumbyid(1);
+		forum.setForumContent("welldone");
+		forum.setForumName("nice");
+		assertTrue("Problem in updation",forumdao.updateforum(forum));
+	}
+	
 
+
+}
