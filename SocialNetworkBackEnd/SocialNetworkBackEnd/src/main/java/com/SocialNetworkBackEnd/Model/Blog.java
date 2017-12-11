@@ -1,10 +1,10 @@
 package com.SocialNetworkBackEnd.Model;
 
-	
 import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -12,16 +12,20 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Entity
+@Table
 public class Blog 
 {
 	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	
 	int blogId;
 	
 	String blogName;
 	String blogContent;
-	String username;
+	int userid;
 	String status;
 	int likes;
+	
 	Date createDate;
 	
 	public Date getCreateDate() {
@@ -54,13 +58,12 @@ public class Blog
 	{
 		this.blogContent = blogContent;
 	}
-	public String getUsername() 
-	{
-		return username;
+	
+	public int getUserid() {
+		return userid;
 	}
-	public void setUsername(String username) 
-	{
-		this.username = username;
+	public void setUserid(int userid) {
+		this.userid = userid;
 	}
 	public String getStatus() {
 		return status;
@@ -78,3 +81,4 @@ public class Blog
 	
 	
 }
+
