@@ -3,15 +3,34 @@ package com.SocialNetworkBackEnd.Model;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import org.springframework.stereotype.Component;
+
 @Component
 @Entity
-
 public class Forum {
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+    
+	int ForumId;
+	int UserId;
+	String forumName;
+	String forumContent;
+	String username;
+	String status;
+	Date createDate;
 	
-		
+	public int getForumId() {
+		return ForumId;
+	}
+	public void setForumId(int forumId) {
+		ForumId = forumId;
+	}
+			
 	public int getUserId() {
 		return UserId;
 	}
@@ -42,31 +61,13 @@ public class Forum {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	public int getLikes() {
-		return likes;
-	}
-	public void setLikes(int likes) {
-		this.likes = likes;
-	}
+	
 	public Date getCreateDate() {
 		return createDate;
 	}
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
 	}
-		@Id
-		int UserId;
-		int ForumId;
-		public int getForumId() {
-			return ForumId;
-		}
-		public void setForumId(int forumId) {
-			ForumId = forumId;
-		}
-		String forumName;
-		String forumContent;
-		String username;
-		String status;
-		int likes;
-		Date createDate;
-}
+
+	
+	}
