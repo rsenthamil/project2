@@ -1,8 +1,8 @@
-package com.SocialNetworkBackEnd.Test;
-
-
+package SocialNetworkRest.SocialNetworkBackEnd.test;
 
 import static org.junit.Assert.*;
+
+import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -14,43 +14,97 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-import com.SocialNetworkBackEnd.Config.AppConfig;
+import com.SocialNetworkBackEnd.Config.ApplicationContextConfig;
 import com.SocialNetworkBackEnd.Dao.UserDao;
-import com.SocialNetworkBackEnd.Model.UserDetails;
+import com.SocialNetworkBackEnd.Model.UserDetail;
 
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes={AppConfig.class})
+@ContextConfiguration(classes={ApplicationContextConfig.class})
 @WebAppConfiguration
 @Transactional
-public class UserTest {
+public class UserDaoTest {
   
-   @Autowired
-  UserDao userdao;
+    @Autowired
+    UserDao userdao;
 	@Autowired
-    public UserDetails user;
+    public UserDetail user;
 	
 	@Autowired
 	SessionFactory sessionFactory;
-	
-	
-	@Ignore
+
 	@Test
 	public void addTest()
 	{
 		//UserDao userdao=new UserDaoImpl(sessionFactory);
-		UserDetails user=new UserDetails();
-		user.setUserId(12);
-		user.setUserName("abc");
+		UserDetail user=new UserDetail();
+		//user.setUserId(13);
+		user.setUserName("aa");
 		user.setRole("user");
-		user.setEmailId("abc@gmail.com");
+		user.setEmailId("aa@gmail.com");
 		user.setIsOnline("N");
-		user.setPassword("aabb");
+		user.setPassword("aa");
 		System.out.println("check1");
 		System.out.println(userdao);
 		assertTrue("Problem in Inserting User",userdao.addUser(user));
 		System.out.println("check2");
-		System.out.println("EmailID:"+user.getEmailId());
-		System.out.println("UserName:"+user.getUserName());
+	
 	}
+// @Ignore
+	@Test
+	public void updateTest()
+	{
+		//UserDao userdao=new UserDaoImpl(sessionFactory);
+		//UserDetail user=new UserDetail();
+		UserDetail user=userdao.getuserbyid(1);
+		//user.setUserId(13);
+		user.setUserName("bb");
+		user.setRole("user");
+		user.setEmailId("aa@gmail.com");
+		user.setIsOnline("N");
+		user.setPassword("bb");
+		System.out.println("check1");
+		System.out.println(userdao);
+		assertTrue("Problem in Updating User",userdao.updateuser(user));
+		System.out.println("check2");
+	
+	}
+//   @Ignore
+   @Test
+   public void getallTest()
+   {
+	   List<UserDetail> udetail=userdao.getalluser();
+	   System.out.println(udetail);
+	   assertNotNull("User list not found",udetail.get(0));
+	   
+	   for(UserDetail userd:udetail)
+	   {
+		   System.out.println("UserID:"+userd.getUserId()+"Name:"+userd.getUserName()+"Role:"+userd.getRole()+"Email:"+userd.getEmailId()+"online"+userd.getIsOnline()+"Password"+userd.getPassword());
+	   }
+   }
+  // @Ignore
+   @Test
+   public void getuserbyidTest()
+   {
+       UserDetail ud=userdao.getuserbyid(1);
+       System.out.println("getuserbyid() method invoked");
+       System.out.println("username="+ud.getUserName());
+   }
+   //@Ignore
+   @Test
+   public void deleteuserTest()
+   {
+       UserDetail ud=userdao.getuserbyid(1);
+       assertTrue("problem in deleting user",userdao.deleteuser(ud));
+   }
+   
+   //@Ignore
+   @Test
+   public void changeonlinestatus()
+   {
+       UserDetail u=userdao.getuserbyid(1);
+       u.setIsOnline("y");
+       assertTrue("problem in changing the  user online status",userdao.updateOnlineStatus(u));
+       
+   }
 }
