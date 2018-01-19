@@ -19,7 +19,7 @@ userdao userDAO;
 @PostMapping(value="/insertuser")
 public ResponseEntity<userdetail> saveuser(@RequestBody userdetail b)
 {
-	b.setRole("admin");
+	b.setRole("user");
 	b.setIsOnline("N");
 	b.setStatus("N");
 if(userDAO.adduser(b))
